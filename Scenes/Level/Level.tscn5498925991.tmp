@@ -12,7 +12,7 @@ texture_region_size = Vector2i(276, 148)
 
 [sub_resource type="TileSet" id="TileSet_k2uda"]
 tile_shape = 1
-tile_layout = 4
+tile_layout = 5
 tile_size = Vector2i(256, 128)
 sources/0 = SubResource("TileSetAtlasSource_qp1lj")
 
@@ -33,7 +33,8 @@ script = ExtResource("1_ahb13")
 
 [node name="Grid" type="TileMapLayer" parent="BoardManager" unique_id=1551702305]
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAAEAAAAAAAAAAAADAAEAAAAAAAAAAAACAAEAAAAAAAAAAAABAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAMAAAAAAAAAAAADAAMAAAAAAAAAAAACAAMAAAAAAAAAAAABAAMAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAA=")
+position = Vector2(110, 346)
+tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAEAP//AAAAAAAAAAAEAP7/AAAAAAAAAAAEAP3/AAAAAAAAAAAEAPz/AAAAAAAAAAADAPz/AAAAAAAAAAACAPz/AAAAAAAAAAABAPz/AAAAAAAAAAAAAPz/AAAAAAAAAAAAAP3/AAAAAAAAAAAAAP7/AAAAAAAAAAAAAP//AAAAAAAAAAABAP//AAAAAAAAAAACAP//AAAAAAAAAAADAP//AAAAAAAAAAADAP7/AAAAAAAAAAADAP3/AAAAAAAAAAACAP3/AAAAAAAAAAABAP3/AAAAAAAAAAABAP7/AAAAAAAAAAACAP7/AAAAAAAAAAA=")
 tile_set = SubResource("TileSet_k2uda")
 
 [node name="Units" type="Node2D" parent="BoardManager" unique_id=1665126100]
@@ -41,9 +42,6 @@ tile_set = SubResource("TileSet_k2uda")
 [node name="PlayerGroup" type="Node2D" parent="BoardManager/Units" unique_id=42435511]
 
 [node name="Knight2" parent="BoardManager/Units/PlayerGroup" unique_id=1059895548 instance=ExtResource("5_dli4q")]
-position = Vector2(123, 44)
+position = Vector2(754, 399)
 
 [node name="OpponentGroup" type="Node2D" parent="BoardManager/Units" unique_id=2004668275]
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=710018210]
-position = Vector2(639, 3)
