@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b8kbxb5bop2k8" path="res://Scenes/Level/level.gd" id="1_ahb13"]
 [ext_resource type="PackedScene" uid="uid://cpu2p64ou5rb4" path="res://board_manager.tscn" id="4_ahb13"]
-[ext_resource type="PackedScene" uid="uid://dfsnsv36c634p" path="res://knight.tscn" id="5_dli4q"]
+[ext_resource type="PackedScene" uid="uid://dxmycd7jva0vo" path="res://Scenes/Units/Knight.tscn" id="4_qp1lj"]
+[ext_resource type="PackedScene" uid="uid://5oxibr4eyjgx" path="res://Scenes/Units/Archer.tscn" id="5_k2uda"]
 [ext_resource type="Texture2D" uid="uid://cfswib8b6m816" path="res://Assets/UI/Grid/UI_icon_grid_grey.png" id="27_hba8o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qp1lj"]
@@ -40,8 +41,11 @@ tile_set = SubResource("TileSet_k2uda")
 
 [node name="PlayerGroup" type="Node2D" parent="BoardManager/Units" unique_id=42435511]
 
-[node name="Knight2" parent="BoardManager/Units/PlayerGroup" unique_id=1059895548 instance=ExtResource("5_dli4q")]
-position = Vector2(123, 44)
+[node name="KnightUnit" parent="BoardManager/Units/PlayerGroup" unique_id=685786526 instance=ExtResource("4_qp1lj")]
+position = Vector2(257, -7)
+
+[node name="ArcherUnit" parent="BoardManager/Units/PlayerGroup" unique_id=88767328 instance=ExtResource("5_k2uda")]
+position = Vector2(117, 63)
 
 [node name="OpponentGroup" type="Node2D" parent="BoardManager/Units" unique_id=2004668275]
 

@@ -115,12 +115,17 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Unit" unique_id=685786526 instance=ExtResource("1_x27d5")]
+[node name="EnemyUnit" unique_id=685786526 instance=ExtResource("1_x27d5")]
 
 [node name="Sprite2D" parent="." index="0" unique_id=1963522467]
+position = Vector2(-128, -66)
 sprite_frames = SubResource("SpriteFrames_o2a23")
 animation = &"Attack"
 frame_progress = 0.42898902
 
 [node name="Label" parent="." index="2" unique_id=2068684992]
+offset_left = -28.0
+offset_top = -51.0
+offset_right = 25.0
+offset_bottom = -28.0
 text = "Enemy"

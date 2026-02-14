@@ -1,11 +1,19 @@
 [gd_scene format=3 uid="uid://dfsnsv36c634p"]
 
 [ext_resource type="Texture2D" uid="uid://c2pxov12dbok6" path="res://Assets/Characters/Knight/chr_knight_attack.png" id="1_26ldq"]
-[ext_resource type="Script" uid="uid://cdrlvoigqxsxe" path="res://knight.gd" id="1_np0bx"]
 [ext_resource type="Texture2D" uid="uid://47nj43fas1m7" path="res://Assets/Characters/Knight/chr_knight.png" id="2_np0bx"]
 [ext_resource type="Texture2D" uid="uid://b3omba331r3cy" path="res://Assets/Characters/Knight/chr_knight_idle.png" id="3_go3up"]
 [ext_resource type="Texture2D" uid="uid://cfawr5g0mnk8t" path="res://Assets/Characters/Knight/chr_knight_run_backward.png" id="5_gadha"]
 [ext_resource type="Texture2D" uid="uid://bo7gu63fb4wye" path="res://Assets/Characters/Knight/chr_knight_run_upward.png" id="6_o118k"]
+
+[sub_resource type="GDScript" id="GDScript_go3up"]
+script/source = "extends Node2D
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+
+func _ready() -> void:
+	sprite.play(\"idle\")
+"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gadha"]
 atlas = ExtResource("1_26ldq")
@@ -249,7 +257,7 @@ animations = [{
 }]
 
 [node name="Node2D" type="Node2D" unique_id=1059895548]
-script = ExtResource("1_np0bx")
+script = SubResource("GDScript_go3up")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1818542678]
 sprite_frames = SubResource("SpriteFrames_mqylv")

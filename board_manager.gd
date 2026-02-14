@@ -20,11 +20,22 @@ func _ready():
 
 func _unhandled_input(event: InputEvent):
 	if event.is_action_pressed("left_click"):
+		print("=== UNHANDLED INPUT FIRED ===")
+		print("LClick")
 		var tile_pos = grid.local_to_map(grid.to_local(get_global_mouse_position()))
+		print("Tile pos: ", tile_pos)
+		print("Player units node: ", player_units)
+		print("Player units children count: ", player_units.get_child_count())
 		
 		if selected_unit == null:
+			print("Trying to select unit...")
 			selected_unit = get_unit_at_tile(tile_pos)
+			if selected_unit:
+				print("✓ SELECTED: ", selected_unit.name)
+			else:
+				print("✗ NO UNIT FOUND at tile ", tile_pos)
 		else:
+			print("Unit already selected: ", selected_unit.name)
 			if not is_moving:
 				if is_valid_move_target(tile_pos):
 					is_moving = true
@@ -32,10 +43,16 @@ func _unhandled_input(event: InputEvent):
 					selected_unit = null
 
 func get_unit_at_tile(tile_pos: Vector2i) -> Node2D:
+	print("  Searching for unit at tile: ", tile_pos)
 	for unit in player_units.get_children():
-		if grid.local_to_map(unit.global_position) == tile_pos:
+		var unit_tile = grid.local_to_map(unit.global_position)
+		print("    - ", unit.name, " is at tile ", unit_tile, " (global pos: ", unit.global_position, ")")
+		if unit_tile == tile_pos:
+			print("    -> MATCH!")
 			return unit
+	print("  No match found")
 	return null
+	
 
 func is_valid_move_target(tile_pos: Vector2i) -> bool:
 	return get_unit_at_tile(tile_pos) == null and grid.get_cell_tile_data(tile_pos) != null

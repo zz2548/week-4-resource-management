@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://cdq3vg5uy60yu"]
 
+[ext_resource type="Script" uid="uid://dxo57u8sv551l" path="res://Scenes/Units/unit.gd" id="1_bxx5k"]
 [ext_resource type="Texture2D" uid="uid://c2pxov12dbok6" path="res://Assets/Characters/Knight/chr_knight_attack.png" id="1_t8my3"]
 [ext_resource type="Texture2D" uid="uid://b3omba331r3cy" path="res://Assets/Characters/Knight/chr_knight_idle.png" id="2_bxx5k"]
 
@@ -115,6 +116,7 @@ animations = [{
 }]
 
 [node name="Unit" type="Node2D" unique_id=685786526]
+script = ExtResource("1_bxx5k")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="." unique_id=1963522467]
 texture_filter = 1
