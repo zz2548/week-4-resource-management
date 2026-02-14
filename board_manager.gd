@@ -71,11 +71,33 @@ func move_unit_to(unit: Node2D, target_tile: Vector2i):
 	
 func move_unit_along_path(unit: Node2D):
 	if not unit_paths.has(unit) or unit_paths[unit].is_empty():
+		print("[MOVEMENT] Path complete for ", unit.name)
+		# Stop animation
+		if unit.has_method("set_idle"):
+			print("  Calling set_idle() on ", unit.name)
+			unit.set_idle()
+		else:
+			print("  WARNING: ", unit.name, " doesn't have set_idle() method!")
 		return
 	
 	var current_path = unit_paths[unit]
 	var target_pos = grid.map_to_local(current_path[0])
 	target_pos.y += UNIT_Y_OFFSET
+	
+	# Get direction
+	var current_tile = grid.local_to_map(unit.global_position)
+	var next_tile = current_path[0]
+	var direction = get_movement_direction(current_tile, next_tile)
+	
+	print("[MOVEMENT] Moving ", unit.name, " from ", current_tile, " to ", next_tile, " (direction: ", direction, ")")
+	
+	# Play animation
+	if unit.has_method("set_moving"):
+		print("  Calling set_moving('", direction, "') on ", unit.name)
+		unit.set_moving(direction)
+	else:
+		print("  WARNING: ", unit.name, " doesn't have set_moving() method!")
+		print("  Available methods: ", unit.get_method_list().map(func(m): return m.name))
 	
 	var tween = create_tween()
 	tween.tween_property(unit, "global_position", target_pos, 0.3)
@@ -83,6 +105,30 @@ func move_unit_along_path(unit: Node2D):
 		current_path.pop_front()
 		if current_path.is_empty():
 			unit_paths.erase(unit)
+			if unit.has_method("set_idle"):
+				unit.set_idle()
 		else:
 			move_unit_along_path(unit)
 	)
+
+func get_movement_direction(from: Vector2i, to: Vector2i) -> String:
+	var delta = to - from
+	
+	# Check for diagonal movement first
+	if delta.x != 0 and delta.y != 0:
+		# Diagonal movement
+		var horizontal = "right" if delta.x > 0 else "left"
+		var vertical = "down" if delta.y > 0 else "up"
+		return horizontal + "_and_" + vertical
+	
+	# Cardinal directions
+	if delta.y > 0:
+		return "down"
+	elif delta.y < 0:
+		return "up"
+	elif delta.x > 0:
+		return "right"
+	elif delta.x < 0:
+		return "left"
+	
+	return "down"  # Default

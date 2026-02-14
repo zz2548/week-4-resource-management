@@ -1,15 +1,19 @@
 [gd_scene format=3 uid="uid://dxmycd7jva0vo"]
 
 [ext_resource type="PackedScene" uid="uid://cdq3vg5uy60yu" path="res://Scenes/Units/Unit.tscn" id="1_84vrm"]
+[ext_resource type="Script" uid="uid://vx4tooqgtsce" path="res://Scenes/Units/knight.gd" id="2_wu6t3"]
 
 [node name="KnightUnit" unique_id=685786526 instance=ExtResource("1_84vrm")]
 
 [node name="Sprite2D" parent="." index="0" unique_id=1963522467]
-position = Vector2(-125, -65)
-frame_progress = 0.0
+position = Vector2(-126, -68)
+script = ExtResource("2_wu6t3")
+
+[node name="Area2D" parent="." index="1" unique_id=284537200]
+position = Vector2(126, 68)
 
 [node name="Label" parent="." index="2" unique_id=2068684992]
-offset_left = -25.0
-offset_top = -50.0
-offset_right = 26.0
-offset_bottom = -27.0
+offset_left = -24.0
+offset_top = -51.0
+offset_right = 27.0
+offset_bottom = -28.0
