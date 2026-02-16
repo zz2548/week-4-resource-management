@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dlpl7dhq03rts"]
+
+[node name="TurnUI" type="CanvasLayer" unique_id=1291704581]
+
+[node name="Panel" type="Panel" parent="." unique_id=255689446]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -199.0
+offset_right = 1.0
+offset_bottom = 80.0
+grow_horizontal = 0
+
+[node name="TurnLabel" type="Label" parent="Panel" unique_id=488554133]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 11.0
+offset_right = 149.0
+offset_bottom = 34.0
+text = "PLAYER TURN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EndTurnButton" type="Button" parent="Panel" unique_id=1772667769]
+layout_mode = 0
+offset_left = 34.0
+offset_top = 34.0
+offset_right = 154.0
+offset_bottom = 81.0
+text = "End Turn"
+
+[node name="UnitInfo" type="Panel" parent="." unique_id=408639639]
+offset_right = 200.0
+offset_bottom = 120.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UnitInfo" unique_id=1391402928]
+layout_mode = 0
+offset_right = 198.0
+offset_bottom = 124.0
+
+[node name="NameLabel" type="Label" parent="UnitInfo/VBoxContainer" unique_id=1983122572]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="UnitInfo/VBoxContainer" unique_id=801540186]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="UnitInfo/VBoxContainer" unique_id=220046097]
+layout_mode = 2

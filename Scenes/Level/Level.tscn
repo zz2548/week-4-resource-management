@@ -4,6 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://cpu2p64ou5rb4" path="res://board_manager.tscn" id="4_ahb13"]
 [ext_resource type="PackedScene" uid="uid://dxmycd7jva0vo" path="res://Scenes/Units/Knight.tscn" id="4_qp1lj"]
 [ext_resource type="PackedScene" uid="uid://5oxibr4eyjgx" path="res://Scenes/Units/Archer.tscn" id="5_k2uda"]
+[ext_resource type="PackedScene" uid="uid://c2bg8aul7gs0s" path="res://Scenes/Units/Enemy.tscn" id="6_8gphe"]
+[ext_resource type="PackedScene" uid="uid://dlpl7dhq03rts" path="res://Scenes/turn_ui.tscn" id="7_t3e81"]
+[ext_resource type="Script" uid="uid://dqy3re0qa6u05" path="res://Scenes/turn_ui.gd" id="8_t3e81"]
 [ext_resource type="Texture2D" uid="uid://cfswib8b6m816" path="res://Assets/UI/Grid/UI_icon_grid_grey.png" id="27_hba8o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qp1lj"]
@@ -43,11 +46,23 @@ tile_set = SubResource("TileSet_k2uda")
 
 [node name="KnightUnit" parent="BoardManager/Units/PlayerGroup" unique_id=685786526 instance=ExtResource("4_qp1lj")]
 position = Vector2(257, -7)
+attack_damage = 20
 
 [node name="ArcherUnit" parent="BoardManager/Units/PlayerGroup" unique_id=88767328 instance=ExtResource("5_k2uda")]
 position = Vector2(117, 63)
+max_health = 70
+current_health = 70
+attack_damage = 25
+attack_range = 2
 
 [node name="OpponentGroup" type="Node2D" parent="BoardManager/Units" unique_id=2004668275]
+
+[node name="EnemyUnit" parent="BoardManager/Units/OpponentGroup" unique_id=248683657 instance=ExtResource("6_8gphe")]
+position = Vector2(1016, -6)
+team = "enemy"
+
+[node name="TurnUI" parent="." unique_id=1291704581 instance=ExtResource("7_t3e81")]
+script = ExtResource("8_t3e81")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=710018210]
 position = Vector2(639, 3)

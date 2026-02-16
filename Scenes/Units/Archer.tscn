@@ -113,11 +113,9 @@ animations = [{
 [node name="Sprite2D" parent="." index="0" unique_id=1963522467]
 position = Vector2(-126, -67)
 sprite_frames = SubResource("SpriteFrames_thpkb")
-animation = &"Idle"
-frame_progress = 0.0017985901
+animation = &"Attack"
 
 [node name="Label" parent="." index="2" unique_id=2068684992]
-offset_left = -26.0
 offset_top = -52.0
 offset_right = 26.0
 offset_bottom = -29.0
