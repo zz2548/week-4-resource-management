@@ -3,23 +3,24 @@
 [ext_resource type="Script" uid="uid://cyxshlc1a3lnf" path="res://scripts/IngredientCard.gd" id="1_o0muc"]
 
 [node name="IngredientCard" type="Button" unique_id=2024689789]
-custom_minimum_size = Vector2(300, 100)
+custom_minimum_size = Vector2(450, 100)
+offset_right = 300.0
+offset_bottom = 100.0
 theme_override_font_sizes/font_size = 22
 script = ExtResource("1_o0muc")
 
 [node name="Row" type="HBoxContainer" parent="." unique_id=160168879]
-layout_mode = 2
-theme_override_constants/separation = 12
+layout_mode = 0
 size_flags_horizontal = 3
-size_flags_vertical = 1
+theme_override_constants/separation = 12
 
 [node name="Icon" type="TextureRect" parent="Row" unique_id=232208746]
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="TextVBox" type="VBoxContainer" parent="Row" unique_id=921111453]
 layout_mode = 2
