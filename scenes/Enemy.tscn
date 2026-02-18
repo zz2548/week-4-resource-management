@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://k6532ribjwag"]
+
+[ext_resource type="Script" uid="uid://lbr4i71tm54g" path="res://scripts/Enemy.gd" id="1_enemy"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_default"]
+
+[node name="Enemy" type="Node2D" unique_id=620023687]
+position = Vector2(960, 300)
+script = ExtResource("1_enemy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=243972389]
+texture_filter = 1
+position = Vector2(0, 14)
+scale = Vector2(4, 4)
+sprite_frames = SubResource("SpriteFrames_default")
+autoplay = "default"

@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cf5rpj5sbk6ya"]
+
+[ext_resource type="Texture2D" uid="uid://ckeyf0phc0e2h" path="res://assets/enemy/Knight Sprite.png" id="1_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uscnc"]
+atlas = ExtResource("1_tex")
+region = Rect2(0, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lo8jp"]
+atlas = ExtResource("1_tex")
+region = Rect2(42, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2cybr"]
+atlas = ExtResource("1_tex")
+region = Rect2(84, 0, 42, 42)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3d1om"]
+atlas = ExtResource("1_tex")
+region = Rect2(126, 0, 42, 42)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uscnc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lo8jp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2cybr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3d1om")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

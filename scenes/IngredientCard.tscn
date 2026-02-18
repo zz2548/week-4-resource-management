@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://dshtrkyp6b1pn"]
+
+[ext_resource type="Script" uid="uid://cyxshlc1a3lnf" path="res://scripts/IngredientCard.gd" id="1_o0muc"]
+
+[node name="IngredientCard" type="Button" unique_id=2024689789]
+custom_minimum_size = Vector2(300, 100)
+theme_override_font_sizes/font_size = 22
+script = ExtResource("1_o0muc")
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=160168879]
+layout_mode = 2
+theme_override_constants/separation = 12
+size_flags_horizontal = 3
+size_flags_vertical = 1
+
+[node name="Icon" type="TextureRect" parent="Row" unique_id=232208746]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+stretch_mode = 5
+expand_mode = 1
+
+[node name="TextVBox" type="VBoxContainer" parent="Row" unique_id=921111453]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="Row/TextVBox" unique_id=1686728821]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+
+[node name="CountLabel" type="Label" parent="Row/TextVBox" unique_id=421746553]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+
+[node name="RightVBox" type="VBoxContainer" parent="Row" unique_id=3001001]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="TagsLabel" type="Label" parent="Row/RightVBox" unique_id=3001002]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "—"
+
+[node name="SatisfactionLabel" type="Label" parent="Row/RightVBox" unique_id=3001003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "0"

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://editor_enemy_sf"]
+
+[ext_resource type="SpriteFrames" path="res://resources/enemies/flying_eye_sprite_frames.tres" id="1_sf"]
+
+[node name="EnemySpriteFramesEditor" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(200, 200)
+scale = Vector2(4, 4)
+sprite_frames = ExtResource("1_sf")
+autoplay = "default"

@@ -1,0 +1,260 @@
+[gd_scene format=3 uid="uid://ctrtf1axeq4f4"]
+
+[ext_resource type="Script" uid="uid://y558jnc27qt6" path="res://scripts/Main.gd" id="1_jyhfs"]
+[ext_resource type="Texture2D" uid="uid://eun5hxceljq5" path="res://assets/background/castle_indoor_background.png" id="1_o5qli"]
+[ext_resource type="Texture2D" uid="uid://d1ytvfxf1hies" path="res://assets/ui/House Basics Image.png" id="3_sugp2"]
+[ext_resource type="Script" uid="uid://dytn4brsm0gsv" path="res://scripts/PotDropZone.gd" id="4_potdrop"]
+[ext_resource type="Script" uid="uid://b3hvgf4w06m4i" path="res://scripts/BottomBarLayout.gd" id="5_bottombar"]
+[ext_resource type="PackedScene" uid="uid://bqx7enemy01" path="res://scenes/Enemy.tscn" id="6_enemy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_85g3d"]
+atlas = ExtResource("3_sugp2")
+region = Rect2(47.380615, 65.23442, 16.19487, 15.273216)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_btn"]
+bg_color = Color(0.8, 0.15, 0.15, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_selected_drop"]
+bg_color = Color(0.25, 0.35, 0.5, 0.85)
+corner_radius = 4
+
+[node name="Main" type="Node2D" unique_id=385698184]
+script = ExtResource("1_jyhfs")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=916276689]
+texture_filter = 1
+position = Vector2(960, 440)
+scale = Vector2(3.0011034, 2.9947917)
+texture = ExtResource("1_o5qli")
+
+[node name="Enemy" parent="." instance=ExtResource("6_enemy")]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=2121980572]
+offset = Vector2(960, 540)
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1549024612]
+
+[node name="TopBar" type="PanelContainer" parent="UI" unique_id=2000001]
+custom_minimum_size = Vector2(0, 100)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="EnemyVbox" type="VBoxContainer" parent="UI/TopBar" unique_id=2000002]
+layout_mode = 2
+
+[node name="StageLabel" type="Label" parent="UI/TopBar/EnemyVbox" unique_id=2000003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Stage 1 / 3"
+
+[node name="EnemyNameLabel" type="Label" parent="UI/TopBar/EnemyVbox" unique_id=2000004]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "King's Guard"
+
+[node name="EnemyHintsLabel" type="Label" parent="UI/TopBar/EnemyVbox" unique_id=2000005]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Needs: spice ≥ 3  |  Allergy: ?"
+
+[node name="BottomBar" type="PanelContainer" parent="UI" unique_id=1116340906]
+custom_minimum_size = Vector2(0, 600)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -600.0
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("5_bottombar")
+
+[node name="Row" type="HBoxContainer" parent="UI/BottomBar" unique_id=458852276]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+alignment = 1
+
+[node name="InventoryPanel" type="PanelContainer" parent="UI/BottomBar/Row" unique_id=1059061628]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="InventoryVBox" type="VBoxContainer" parent="UI/BottomBar/Row/InventoryPanel" unique_id=59420013]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+
+[node name="InventoryTitle" type="Label" parent="UI/BottomBar/Row/InventoryPanel/InventoryVBox" unique_id=971942765]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Inventory"
+
+[node name="InventoryGrid" type="GridContainer" parent="UI/BottomBar/Row/InventoryPanel/InventoryVBox" unique_id=2417530]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 24
+
+[node name="PotPanel" type="PanelContainer" parent="UI/BottomBar/Row" unique_id=1629005784]
+custom_minimum_size = Vector2(350, 0)
+layout_mode = 2
+
+[node name="PotVBox" type="VBoxContainer" parent="UI/BottomBar/Row/PotPanel" unique_id=2047342971]
+layout_mode = 2
+
+[node name="PotTitle" type="Label" parent="UI/BottomBar/Row/PotPanel/PotVBox" unique_id=824471604]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Pot
+"
+
+[node name="PotContainer" type="Control" parent="UI/BottomBar/Row/PotPanel/PotVBox" unique_id=2000008]
+custom_minimum_size = Vector2(300, 300)
+layout_mode = 2
+
+[node name="PotSprite" type="TextureRect" parent="UI/BottomBar/Row/PotPanel/PotVBox/PotContainer" unique_id=894934759]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_85g3d")
+stretch_mode = 5
+
+[node name="PotDropZone" type="Control" parent="UI/BottomBar/Row/PotPanel/PotVBox/PotContainer" unique_id=2000007]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_potdrop")
+
+[node name="Label" type="Label" parent="UI/BottomBar/Row/PotPanel/PotVBox" unique_id=1560110838]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Pot (drop to combine ingredients)"
+
+[node name="DishPanel" type="PanelContainer" parent="UI/BottomBar/Row" unique_id=684364783]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="DishVbox" type="VBoxContainer" parent="UI/BottomBar/Row/DishPanel" unique_id=1461173879]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsLabel" type="Label" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=1834548962]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Stats:"
+
+[node name="DishStatsRow" type="HBoxContainer" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=664115334]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SatisfactionLabel" type="Label" parent="UI/BottomBar/Row/DishPanel/DishVbox/DishStatsRow" unique_id=664115335]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.8, 0.2, 1)
+theme_override_font_sizes/font_size = 24
+text = "Satisfaction: 0"
+
+[node name="TagCountLabel" type="Label" parent="UI/BottomBar/Row/DishPanel/DishVbox/DishStatsRow" unique_id=664115336]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = " | Tag count: 0"
+
+[node name="SelectedDropZone" type="PanelContainer" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=4000001]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_selected_drop")
+
+[node name="SelectedVbox" type="VBoxContainer" parent="UI/BottomBar/Row/DishPanel/DishVbox/SelectedDropZone" unique_id=4000002]
+layout_mode = 2
+
+[node name="SelectedTitle" type="Label" parent="UI/BottomBar/Row/DishPanel/DishVbox/SelectedDropZone/SelectedVbox" unique_id=1664322509]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Selected (drop here):"
+
+[node name="SelectedList" type="RichTextLabel" parent="UI/BottomBar/Row/DishPanel/DishVbox/SelectedDropZone/SelectedVbox" unique_id=161194470]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 24
+fit_content = true
+
+[node name="SelectedDropTarget" type="Control" parent="UI/BottomBar/Row/DishPanel/DishVbox/SelectedDropZone" unique_id=4000003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+script = ExtResource("4_potdrop")
+
+[node name="EndCookingButton" type="Button" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=2000006]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_red_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_red_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_red_btn")
+text = "End Cooking"
+
+[node name="ResultLayer" type="CanvasLayer" parent="." unique_id=5000001]
+layer = 10
+
+[node name="ResultOverlay" type="Control" parent="ResultLayer" unique_id=3000001]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="ResultLayer/ResultOverlay" unique_id=3000002]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="CenterContainer" type="CenterContainer" parent="ResultLayer/ResultOverlay" unique_id=3000003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ResultLayer/ResultOverlay/CenterContainer" unique_id=3000004]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="ResultLabel" type="Label" parent="ResultLayer/ResultOverlay/CenterContainer/VBox" unique_id=3000005]
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+text = "LOSE"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="ResultLayer/ResultOverlay/CenterContainer/VBox" unique_id=3000006]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Restart"
+
+[node name="ContinueButton" type="Button" parent="ResultLayer/ResultOverlay/CenterContainer/VBox" unique_id=3000007]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Continue"

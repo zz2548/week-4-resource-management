@@ -1,0 +1,53 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://f81jvig3m4f2"]
+
+[ext_resource type="Texture2D" uid="uid://dm4es1hhjddk2" path="res://assets/enemy/Blob Minion.png" id="1_tex"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p60m"]
+atlas = ExtResource("1_tex")
+region = Rect2(0, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gs71"]
+atlas = ExtResource("1_tex")
+region = Rect2(80, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iptcp"]
+atlas = ExtResource("1_tex")
+region = Rect2(160, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4hiqy"]
+atlas = ExtResource("1_tex")
+region = Rect2(240, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhyhb"]
+atlas = ExtResource("1_tex")
+region = Rect2(320, 0, 80, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hxwh5"]
+atlas = ExtResource("1_tex")
+region = Rect2(400, 0, 80, 80)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1p60m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5gs71")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iptcp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4hiqy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhyhb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hxwh5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]

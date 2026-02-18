@@ -1,0 +1,39 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://byjtbgcpu4fvb"]
+
+[ext_resource type="Texture2D" uid="uid://dlmpi3vwq4dwd" path="res://assets/enemy/Flying Eye.png" id="1_rkomb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ng8ge"]
+atlas = ExtResource("1_rkomb")
+region = Rect2(0, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ala3"]
+atlas = ExtResource("1_rkomb")
+region = Rect2(320, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_86uhu"]
+atlas = ExtResource("1_rkomb")
+region = Rect2(640, 0, 320, 320)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p36m4"]
+atlas = ExtResource("1_rkomb")
+region = Rect2(960, 0, 320, 320)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ng8ge")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ala3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_86uhu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p36m4")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
