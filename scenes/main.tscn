@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://bxjdt315qqoeh" path="res://assets/sound/combine.wav" id="7_o6xl0"]
 [ext_resource type="AudioStream" uid="uid://3sq62hpemyoc" path="res://assets/sound/dropoff.wav" id="8_tipki"]
 [ext_resource type="AudioStream" uid="uid://dj7wtaoymlara" path="res://assets/sound/lose.wav" id="10_ya4ey"]
+[ext_resource type="AudioStream" uid="uid://dbnwisxrtiurm" path="res://assets/sound/BGMusic.mp3" id="11_ya4ey"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_85g3d"]
 atlas = ExtResource("3_sugp2")
@@ -260,12 +261,21 @@ text = "Continue"
 
 [node name="WinSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=2069345206]
 stream = ExtResource("7_choun")
+bus = &"SFX"
 
 [node name="CombineSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=1068318782]
 stream = ExtResource("7_o6xl0")
+bus = &"SFX"
 
 [node name="DropOffSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=1032783586]
 stream = ExtResource("8_tipki")
+bus = &"SFX"
 
 [node name="LoseSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=233657408]
 stream = ExtResource("10_ya4ey")
+bus = &"SFX"
+
+[node name="BGMusic" type="AudioStreamPlayer2D" parent="." unique_id=1827591128]
+stream = ExtResource("11_ya4ey")
+autoplay = true
+bus = &"Music"

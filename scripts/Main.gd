@@ -41,11 +41,28 @@ func _ready() -> void:
 	continue_btn.pressed.connect(_on_continue_pressed)
 	_refresh_pot_highlights()
 
+func _play_sfx(player: AudioStreamPlayer2D) -> void:
+	var music_bus: int = AudioServer.get_bus_index("Music")
+	# Fade music down
+	var tween_down: Tween = create_tween()
+	tween_down.tween_method(
+		func(vol: float): AudioServer.set_bus_volume_db(music_bus, vol),
+		0.0, -10.0, 0.3
+	)
+	await tween_down.finished
+	player.play()
+	await player.finished
+	# Fade music back up
+	var tween_up: Tween = create_tween()
+	tween_up.tween_method(
+		func(vol: float): AudioServer.set_bus_volume_db(music_bus, vol),
+		-10.0, 0.0, 0.5
+	)
+
 func _render_inventory() -> void:
 	# Clear old
 	for c in inventory_grid.get_children():
 		c.queue_free()
-
 	# Create cards only for ingredients with count > 0
 	for id in GameState.inventory.keys():
 		var count: int = GameState.inventory[id]
@@ -74,7 +91,7 @@ func _on_ingredient_dropped_to_pot(id: String) -> void:
 	if GameState.inventory.get(id, 0) <= 0:
 		return
 	if GameState.pot_contents.size() == 0:
-		drop_off_sound.play()
+		_play_sfx(drop_off_sound)
 	# Stage 4: block merge if already at max pot combinations this round
 	var idx: int = GameState.stage_index
 	if idx < DataDb.enemies.size():
@@ -89,7 +106,7 @@ func _on_ingredient_dropped_to_pot(id: String) -> void:
 	if GameState.pot_contents.size() == 2:
 		_last_pot_ingredients = GameState.pot_contents.duplicate()
 		GameState.pot_merges_this_stage += 1
-		combine_sound.play()
+		_play_sfx(combine_sound)
 		var combo: Dictionary = DataDb.get_pot_combination(GameState.pot_contents)
 		var result_id: String = combo.get("id", "trash")
 		GameState.inventory[result_id] = GameState.inventory.get(result_id, 0) + 1
@@ -262,7 +279,6 @@ func _evaluate(enemy: Dictionary, stats: Dictionary) -> String:
 				break
 		if not has_allergy_tag:
 			return "LOSE: You must use an ingredient with %s to pass." % [", ".join(allergy_tags)]
-	# If allergy present (or no allergy stage), continue to other checks
 
 	var req: Dictionary = enemy.get("requirements", {})
 
@@ -304,12 +320,12 @@ func _show_result_overlay(is_win: bool) -> void:
 		result_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
 		restart_btn.visible = false
 		continue_btn.visible = true
-		win_sound.play()
+		_play_sfx(win_sound)
 	else:
 		result_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
 		restart_btn.visible = true
 		continue_btn.visible = false
-		lose_sound.play()
+		_play_sfx(lose_sound)
 	result_overlay.visible = true
 
 func _on_restart_pressed() -> void:
@@ -322,7 +338,7 @@ func _on_restart_pressed() -> void:
 func _on_continue_pressed() -> void:
 	result_overlay.visible = false
 	_refresh_dish_ui()
-	
+
 func _refresh_pot_highlights() -> void:
 	for card in inventory_grid.get_children():
 		if not card is Button:
