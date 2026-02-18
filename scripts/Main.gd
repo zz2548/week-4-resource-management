@@ -4,7 +4,6 @@ extends Node2D
 @onready var dish_satisfaction_label: Label = $UI/BottomBar/Row/DishPanel/DishVbox/DishStatsRow/SatisfactionLabel
 @onready var dish_tag_count_label: Label = $UI/BottomBar/Row/DishPanel/DishVbox/DishStatsRow/TagCountLabel
 @onready var selected_list: RichTextLabel = $UI/BottomBar/Row/DishPanel/DishVbox/SelectedDropZone/SelectedVbox/SelectedList
-@onready var end_btn: Button = $UI/BottomBar/Row/DishPanel/DishVbox/EndCookingButton
 @onready var stage_label: Label = $UI/TopBar/EnemyVbox/StageLabel
 @onready var enemy_name_label: Label = $UI/TopBar/EnemyVbox/EnemyNameLabel
 @onready var enemy_hints_label: Label = $UI/TopBar/EnemyVbox/EnemyHintsLabel
@@ -13,11 +12,16 @@ extends Node2D
 @onready var enemy_node: Node2D = $Enemy
 @onready var result_overlay: Control = $ResultLayer/ResultOverlay
 @onready var result_label: Label = $ResultLayer/ResultOverlay/CenterContainer/VBox/ResultLabel
+# Buttons
+@onready var end_btn: Button = $UI/BottomBar/Row/DishPanel/DishVbox/EndCookingButton
 @onready var restart_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/RestartButton
 @onready var continue_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/ContinueButton
 @onready var undo_btn: Button = $UI/BottomBar/Row/DishPanel/DishVbox/UndoButton
-@onready var combine_sound: AudioStreamPlayer2D = $CombineSound
-@onready var drop_off_sound: AudioStreamPlayer2D = $DropOffSound
+# Sound effects
+@onready var combine_sound: AudioStreamPlayer2D = $SFX/CombineSound
+@onready var drop_off_sound: AudioStreamPlayer2D = $SFX/DropOffSound
+@onready var win_sound: AudioStreamPlayer2D = $SFX/WinSound
+@onready var lose_sound: AudioStreamPlayer2D = $SFX/LoseSound
 
 const ING_CARD_SCENE := preload("res://scenes/IngredientCard.tscn")
 
@@ -300,10 +304,12 @@ func _show_result_overlay(is_win: bool) -> void:
 		result_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
 		restart_btn.visible = false
 		continue_btn.visible = true
+		win_sound.play()
 	else:
 		result_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
 		restart_btn.visible = true
 		continue_btn.visible = false
+		lose_sound.play()
 	result_overlay.visible = true
 
 func _on_restart_pressed() -> void:

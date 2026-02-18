@@ -6,8 +6,10 @@
 [ext_resource type="Script" uid="uid://dytn4brsm0gsv" path="res://scripts/PotDropZone.gd" id="4_potdrop"]
 [ext_resource type="Script" uid="uid://b3hvgf4w06m4i" path="res://scripts/BottomBarLayout.gd" id="5_bottombar"]
 [ext_resource type="PackedScene" uid="uid://k6532ribjwag" path="res://scenes/Enemy.tscn" id="6_enemy"]
+[ext_resource type="AudioStream" uid="uid://cq3u2h4sb7p5e" path="res://assets/sound/win.wav" id="7_choun"]
 [ext_resource type="AudioStream" uid="uid://bxjdt315qqoeh" path="res://assets/sound/combine.wav" id="7_o6xl0"]
 [ext_resource type="AudioStream" uid="uid://3sq62hpemyoc" path="res://assets/sound/dropoff.wav" id="8_tipki"]
+[ext_resource type="AudioStream" uid="uid://dj7wtaoymlara" path="res://assets/sound/lose.wav" id="10_ya4ey"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_85g3d"]
 atlas = ExtResource("3_sugp2")
@@ -254,8 +256,16 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Continue"
 
-[node name="CombineSound" type="AudioStreamPlayer2D" parent="." unique_id=1068318782]
+[node name="SFX" type="Node2D" parent="." unique_id=578823460]
+
+[node name="WinSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=2069345206]
+stream = ExtResource("7_choun")
+
+[node name="CombineSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=1068318782]
 stream = ExtResource("7_o6xl0")
 
-[node name="DropOffSound" type="AudioStreamPlayer2D" parent="." unique_id=1032783586]
+[node name="DropOffSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=1032783586]
 stream = ExtResource("8_tipki")
+
+[node name="LoseSound" type="AudioStreamPlayer2D" parent="SFX" unique_id=233657408]
+stream = ExtResource("10_ya4ey")
