@@ -28,7 +28,7 @@ var ingredients := {
 # Stage 1: nut allergy, max 3 ingredients. Stage 2: needs spicy × 3. Stage 3: only protein, high satisfaction. Stage 4: dark magic allergy, max 5 pot combinations this round.
 # Use "sprite_frames": "res://resources/enemies/xxx_sprite_frames.tres" to edit animations in the AnimatedSprite2D GUI (SpriteFrames editor). Else "image" or "frames" in code.
 var enemies := [
-	{"id": "flying_eye", "name": "Flying Eye", "sprite_frames": "res://resources/enemies/flying_eye_sprite_frames.tres", "scale": 6.0, "allergy_tags": ["nuts"], "allergy_known": true, "requirements": {"min_satisfaction": 1, "max_ingredients": 3}},
+	{"id": "flying_eye", "name": "Flying Eye", "sprite_frames": "res://resources/enemies/flying_eye_sprite_frames.tres", "scale": 2.0, "allergy_tags": ["nuts"], "allergy_known": true, "requirements": {"min_satisfaction": 1, "max_ingredients": 3}},
 	{"id": "blob_minion", "name": "Blob Minion", "sprite_frames": "res://resources/enemies/blob_minion_sprite_frames.tres", "scale": 10.0, "allergy_tags": [], "allergy_known": true, "requirements": {"min_satisfaction": 0, "min_tag_count": {"spicy": 3}}},
 	{"id": "knight", "name": "Knight", "sprite_frames": "res://resources/enemies/knight_sprite_frames.tres", "scale": 10.0, "allergy_tags": [], "allergy_known": true, "requirements": {"min_satisfaction": 12, "only_protein": true}},
 	{"id": "summoner", "name": "The Summoner", "sprite_frames": "res://resources/enemies/summoner_sprite_frames.tres", "scale": 10.0, "allergy_tags": ["dark magic"], "allergy_known": true, "requirements": {"min_satisfaction": 1}, "max_pot_combinations": 5},
