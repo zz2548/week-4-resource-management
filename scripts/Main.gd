@@ -15,6 +15,8 @@ extends Node2D
 @onready var result_label: Label = $ResultLayer/ResultOverlay/CenterContainer/VBox/ResultLabel
 @onready var restart_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/RestartButton
 @onready var continue_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/ContinueButton
+@onready var combine_sound: AudioStreamPlayer2D = $CombineSound
+@onready var drop_off_sound: AudioStreamPlayer2D = $DropOffSound
 
 const ING_CARD_SCENE := preload("res://scenes/IngredientCard.tscn")
 
@@ -60,6 +62,8 @@ func _on_ingredient_dropped_to_selected(id: String) -> void:
 func _on_ingredient_dropped_to_pot(id: String) -> void:
 	if GameState.inventory.get(id, 0) <= 0:
 		return
+	if GameState.pot_contents.size() == 0:
+		drop_off_sound.play()
 	# Stage 4: block merge if already at max pot combinations this round
 	var idx: int = GameState.stage_index
 	if idx < DataDb.enemies.size():
@@ -73,6 +77,7 @@ func _on_ingredient_dropped_to_pot(id: String) -> void:
 	GameState.pot_contents.append(id)
 	if GameState.pot_contents.size() == 2:
 		GameState.pot_merges_this_stage += 1
+		combine_sound.play()
 		var combo: Dictionary = DataDb.get_pot_combination(GameState.pot_contents)
 		var result_id: String = combo.get("id", "trash")
 		GameState.inventory[result_id] = GameState.inventory.get(result_id, 0) + 1
