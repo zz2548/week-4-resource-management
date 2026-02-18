@@ -188,6 +188,10 @@ fit_content = true
 layout_mode = 2
 script = ExtResource("4_potdrop")
 
+[node name="UndoButton" type="Button" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=800547411]
+layout_mode = 2
+text = "Undo"
+
 [node name="EndCookingButton" type="Button" parent="UI/BottomBar/Row/DishPanel/DishVbox" unique_id=2000006]
 layout_mode = 2
 size_flags_vertical = 0

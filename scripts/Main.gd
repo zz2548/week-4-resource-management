@@ -15,22 +15,27 @@ extends Node2D
 @onready var result_label: Label = $ResultLayer/ResultOverlay/CenterContainer/VBox/ResultLabel
 @onready var restart_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/RestartButton
 @onready var continue_btn: Button = $ResultLayer/ResultOverlay/CenterContainer/VBox/ContinueButton
+@onready var undo_btn: Button = $UI/BottomBar/Row/DishPanel/DishVbox/UndoButton
 @onready var combine_sound: AudioStreamPlayer2D = $CombineSound
 @onready var drop_off_sound: AudioStreamPlayer2D = $DropOffSound
 
 const ING_CARD_SCENE := preload("res://scenes/IngredientCard.tscn")
+
+var _last_pot_ingredients: Array = []
 
 func _ready() -> void:
 	_refresh_enemy_ui()
 	_render_inventory()
 	_refresh_dish_ui()
 	end_btn.pressed.connect(_on_end_cooking_pressed)
+	undo_btn.pressed.connect(_on_undo_pressed)
 	if pot_drop_zone:
 		pot_drop_zone.ingredient_dropped.connect(_on_ingredient_dropped_to_pot)
 	if selected_drop_target:
 		selected_drop_target.ingredient_dropped.connect(_on_ingredient_dropped_to_selected)
 	restart_btn.pressed.connect(_on_restart_pressed)
 	continue_btn.pressed.connect(_on_continue_pressed)
+	_refresh_pot_highlights()
 
 func _render_inventory() -> void:
 	# Clear old
@@ -48,7 +53,6 @@ func _render_inventory() -> void:
 		var tags_arr: Array = data.get("tags", [])
 		var sat: int = int(data.get("satisfaction", 0))
 		card.setup(id, data["name"], data["icon"], count, tags_arr, sat)
-	
 	_refresh_pot_highlights()
 
 func _on_ingredient_dropped_to_selected(id: String) -> void:
@@ -79,6 +83,7 @@ func _on_ingredient_dropped_to_pot(id: String) -> void:
 	GameState.inventory[id] -= 1
 	GameState.pot_contents.append(id)
 	if GameState.pot_contents.size() == 2:
+		_last_pot_ingredients = GameState.pot_contents.duplicate()
 		GameState.pot_merges_this_stage += 1
 		combine_sound.play()
 		var combo: Dictionary = DataDb.get_pot_combination(GameState.pot_contents)
@@ -201,6 +206,30 @@ func _on_end_cooking_pressed() -> void:
 
 	_show_result_overlay(result_text.begins_with("WIN"))
 
+func _on_undo_pressed() -> void:
+	# Undo ingredient sitting in pot (not yet combined)
+	if not GameState.pot_contents.is_empty():
+		var last_id: String = GameState.pot_contents.back()
+		GameState.pot_contents.remove_at(GameState.pot_contents.size() - 1)
+		GameState.inventory[last_id] = GameState.inventory.get(last_id, 0) + 1
+	# Undo a completed pot combination
+	elif not _last_pot_ingredients.is_empty():
+		var combo: Dictionary = DataDb.get_pot_combination(_last_pot_ingredients)
+		var result_id: String = combo.get("id", "trash")
+		GameState.inventory[result_id] = max(0, GameState.inventory.get(result_id, 0) - 1)
+		for id in _last_pot_ingredients:
+			GameState.inventory[id] = GameState.inventory.get(id, 0) + 1
+		GameState.pot_merges_this_stage = max(0, GameState.pot_merges_this_stage - 1)
+		_last_pot_ingredients.clear()
+	# Undo last dish selection
+	elif not GameState.dish_selected.is_empty():
+		var last_id: String = GameState.dish_selected.back()
+		GameState.dish_selected.remove_at(GameState.dish_selected.size() - 1)
+		GameState.inventory[last_id] = GameState.inventory.get(last_id, 0) + 1
+	_recompute_dish_stats()
+	_render_inventory()
+	_refresh_dish_ui()
+
 func _evaluate(enemy: Dictionary, stats: Dictionary) -> String:
 	# Dish = selected + one pot result (if any)
 	var pot_result: Dictionary = DataDb.get_pot_combination(GameState.pot_contents)
@@ -287,7 +316,7 @@ func _on_restart_pressed() -> void:
 func _on_continue_pressed() -> void:
 	result_overlay.visible = false
 	_refresh_dish_ui()
-
+	
 func _refresh_pot_highlights() -> void:
 	for card in inventory_grid.get_children():
 		if not card is Button:
@@ -298,4 +327,3 @@ func _refresh_pot_highlights() -> void:
 			card.set_highlight(result.get("id", "trash") != "trash")
 		else:
 			card.set_highlight(false)
-			
