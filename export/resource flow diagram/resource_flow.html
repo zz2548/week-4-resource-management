@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cooking Game — Resource Flow</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1208;
+    color: #f0e6c8;
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    overflow-x: auto;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(180,120,20,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(80,40,120,0.12) 0%, transparent 60%);
+  }
+
+  h1 {
+    font-family: 'Cinzel', serif;
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 0.15em;
+    padding: 2rem 1rem 0.5rem;
+    color: #f5c842;
+    text-shadow: 0 0 30px rgba(245,200,66,0.4);
+  }
+  .subtitle {
+    text-align: center;
+    font-style: italic;
+    color: #a08860;
+    margin-bottom: 1.2rem;
+    font-size: 1.1rem;
+  }
+
+  /* Legend — single row, no wrap */
+  .legend {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 1.4rem;
+    margin: 0 auto 1.8rem;
+    max-width: 1100px;
+    padding: 0.65rem 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(245,200,66,0.15);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+  .legend-item { display: flex; align-items: center; gap: 0.45rem; }
+  .leg-box {
+    width: 24px; height: 16px; border-radius: 3px;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+
+  svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 1100px;
+    width: 100%;
+  }
+
+  .node-base { rx: 8; ry: 8; }
+  .node-ingredient { fill: #2a3d1e; stroke: #6abf45; stroke-width: 2; }
+  .node-combined   { fill: #1e2e45; stroke: #4a90d9; stroke-width: 2; }
+  .node-enemy      { fill: #3d1e1e; stroke: #d94a4a; stroke-width: 2; }
+
+  .node-label {
+    font-family: 'Crimson Pro', serif;
+    font-size: 13px;
+    font-weight: 600;
+    fill: #f0e6c8;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .node-sublabel {
+    font-family: 'Crimson Pro', serif;
+    font-size: 10px;
+    fill: #a08860;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    font-style: italic;
+  }
+  .sat-badge {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .tag {
+    font-family: 'Crimson Pro', serif;
+    font-size: 9.5px;
+    fill: #f0e6c8;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .tag-pill { rx: 6; ry: 6; opacity: 0.85; }
+
+  .arrow-base { fill: none; stroke-width: 2; }
+  .arrow-craft  { stroke: #4a90d9; }
+  .arrow-defeat { stroke: #d94a4a; stroke-dasharray: 6 3; }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    fill: #a08860;
+    text-anchor: middle;
+  }
+  .section-box { fill: none; stroke: rgba(160,136,96,0.2); stroke-width: 1; rx: 12; ry: 12; stroke-dasharray: 4 4; }
+</style>
+</head>
+<body>
+
+<h1>Resource Flow Diagram</h1>
+<p class="subtitle">Ingredients · Crafting · Enemies</p>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="leg-box" style="background:#2a3d1e;border-color:#6abf45;"></div>
+    <span>Base Ingredient</span>
+  </div>
+  <div class="legend-item">
+    <div class="leg-box" style="background:#1e2e45;border-color:#4a90d9;"></div>
+    <span>Crafted Result</span>
+  </div>
+  <div class="legend-item">
+    <div class="leg-box" style="background:#3d1e1e;border-color:#d94a4a;"></div>
+    <span>Enemy</span>
+  </div>
+  <div class="legend-item">
+    <svg width="40" height="16"><defs><marker id="ah" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4a90d9"/></marker></defs>
+    <line x1="2" y1="8" x2="34" y2="8" stroke="#4a90d9" stroke-width="2" marker-end="url(#ah)"/></svg>
+    <span>Crafts into</span>
+  </div>
+  <div class="legend-item">
+    <svg width="40" height="16"><defs><marker id="ah2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#d94a4a"/></marker></defs>
+    <line x1="2" y1="8" x2="34" y2="8" stroke="#d94a4a" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#ah2)"/></svg>
+    <span>Defeats enemy</span>
+  </div>
+</div>
+
+<svg viewBox="0 0 1060 680" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4a90d9"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#d94a4a"/>
+    </marker>
+    <filter id="glow-green">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-blue">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- SECTION BACKGROUNDS -->
+  <rect x="10" y="30" width="310" height="615" class="section-box"/>
+  <text x="165" y="22" class="section-label">BASE INGREDIENTS</text>
+
+  <rect x="335" y="30" width="335" height="615" class="section-box"/>
+  <text x="502" y="22" class="section-label">POT CRAFTING</text>
+
+  <rect x="685" y="30" width="365" height="615" class="section-box"/>
+  <text x="867" y="22" class="section-label">ENEMIES</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- BASE INGREDIENTS
+       Left col:  x=20,  w=135, right edge=155
+       Right col: x=165, w=135, right edge=300
+       Rows at y: 50, 160, 275, 390
+  -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- ROW 1: Pepper | Squid -->
+  <rect x="20"  y="50" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="87"  y="67" class="node-label">Pepper</text>
+  <text x="87"  y="81" class="node-sublabel">sat: 2</text>
+  <rect x="25"  y="91" width="40" height="14" class="tag-pill" fill="#7a3a00"/>
+  <text x="45"  y="98" class="tag">spicy</text>
+  <rect x="69"  y="91" width="52" height="14" class="tag-pill" fill="#2a5a1a"/>
+  <text x="95"  y="98" class="tag">vegetable</text>
+
+  <rect x="165" y="50" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="232" y="67" class="node-label">Squid</text>
+  <text x="232" y="81" class="node-sublabel">sat: 3</text>
+  <rect x="170" y="91" width="46" height="14" class="tag-pill" fill="#005a6e"/>
+  <text x="193" y="98" class="tag">seafood</text>
+  <rect x="220" y="91" width="42" height="14" class="tag-pill" fill="#3a5a1a"/>
+  <text x="241" y="98" class="tag">protein</text>
+
+  <!-- ROW 2: Garlic | Nuts Oil -->
+  <rect x="20"  y="160" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="87"  y="177" class="node-label">Garlic</text>
+  <text x="87"  y="191" class="node-sublabel">sat: 1</text>
+  <rect x="25"  y="201" width="41" height="14" class="tag-pill" fill="#5a4a00"/>
+  <text x="45"  y="208" class="tag">stinky</text>
+  <rect x="70"  y="201" width="52" height="14" class="tag-pill" fill="#2a5a1a"/>
+  <text x="96"  y="208" class="tag">vegetable</text>
+
+  <rect x="165" y="160" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="232" y="177" class="node-label">Nuts Oil</text>
+  <text x="232" y="191" class="node-sublabel">sat: 2</text>
+  <rect x="200" y="201" width="32" height="14" class="tag-pill" fill="#5a3a00"/>
+  <text x="216" y="208" class="tag">nuts</text>
+
+  <!-- ROW 3: Egg | Magic Flower -->
+  <rect x="20"  y="275" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="87"  y="292" class="node-label">Egg</text>
+  <text x="87"  y="306" class="node-sublabel">sat: 3</text>
+  <rect x="45"  y="316" width="42" height="14" class="tag-pill" fill="#3a5a1a"/>
+  <text x="66"  y="323" class="tag">protein</text>
+
+  <rect x="165" y="275" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="232" y="289" class="node-label">Magic</text>
+  <text x="232" y="303" class="node-label">Flower</text>
+  <text x="232" y="317" class="node-sublabel">sat: 2</text>
+  <rect x="203" y="316" width="28" height="14" class="tag-pill" fill="#7a3a7a"/>
+  <text x="217" y="323" class="tag">cute</text>
+
+  <!-- ROW 4: Meat | Magic Mushroom -->
+  <rect x="20"  y="390" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="87"  y="407" class="node-label">Meat</text>
+  <text x="87"  y="421" class="node-sublabel">sat: 4</text>
+  <rect x="25"  y="431" width="42" height="14" class="tag-pill" fill="#3a5a1a"/>
+  <text x="46"  y="438" class="tag">protein</text>
+  <rect x="71"  y="431" width="38" height="14" class="tag-pill" fill="#5a2a00"/>
+  <text x="90"  y="438" class="tag">heavy</text>
+
+  <rect x="165" y="390" width="135" height="52" class="node-base node-ingredient" filter="url(#glow-green)"/>
+  <text x="232" y="404" class="node-label">Magic</text>
+  <text x="232" y="418" class="node-label">Mushroom</text>
+  <text x="232" y="432" class="node-sublabel">sat: 2</text>
+  <rect x="204" y="431" width="32" height="14" class="tag-pill" fill="#2a4a5a"/>
+  <text x="220" y="438" class="tag">dizzy</text>
+
+  <!-- Garlic Oil boost note -->
+  <rect x="20" y="500" width="280" height="34" rx="8" fill="rgba(74,144,217,0.07)" stroke="#4a90d9" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="160" y="514" class="node-sublabel" style="fill:#4a90d9;font-size:10.5px;">Garlic Oil + Egg / Meat / Squid</text>
+  <text x="160" y="527" class="node-sublabel" style="fill:#4a90d9;font-size:10.5px;">— boosted +5 protein versions</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- CRAFTED RESULTS
+       x=348, w=150, right edge=498
+       Fire Squid   y=50
+       Garlic Oil   y=160
+       Magical Egg  y=275
+       Sus Meat     y=390
+       Darkmatter   y=500
+  -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- Fire Squid -->
+  <rect x="348" y="50"  width="150" height="52" class="node-base node-combined" filter="url(#glow-blue)"/>
+  <text x="423" y="67"  class="node-label">Fire Squid</text>
+  <text x="423" y="81"  class="node-sublabel">sat: 8</text>
+  <rect x="353" y="91"  width="46" height="14" class="tag-pill" fill="#7a3a00"/>
+  <text x="376" y="98"  class="tag">spicy x3</text>
+  <rect x="403" y="91"  width="46" height="14" class="tag-pill" fill="#005a6e"/>
+  <text x="426" y="98"  class="tag">seafood</text>
+  <circle cx="490" cy="65" r="12" fill="#f5c842" opacity="0.9"/>
+  <text x="490" y="65"  class="sat-badge" fill="#1a1208">8</text>
+
+  <!-- Garlic Oil -->
+  <rect x="348" y="160" width="150" height="52" class="node-base node-combined" filter="url(#glow-blue)"/>
+  <text x="423" y="177" class="node-label">Garlic Oil</text>
+  <text x="423" y="191" class="node-sublabel">sat: 5</text>
+  <rect x="378" y="201" width="41" height="14" class="tag-pill" fill="#5a4a00"/>
+  <text x="398" y="208" class="tag">stinky</text>
+  <circle cx="490" cy="175" r="12" fill="#f5c842" opacity="0.9"/>
+  <text x="490" y="175" class="sat-badge" fill="#1a1208">5</text>
+
+  <!-- Magical Egg -->
+  <rect x="348" y="275" width="150" height="52" class="node-base node-combined" filter="url(#glow-blue)"/>
+  <text x="423" y="292" class="node-label">Magical Egg</text>
+  <text x="423" y="306" class="node-sublabel">sat: 10</text>
+  <rect x="354" y="316" width="36" height="14" class="tag-pill" fill="#7a3a7a"/>
+  <text x="372" y="323" class="tag">magic</text>
+  <rect x="394" y="316" width="42" height="14" class="tag-pill" fill="#3a5a1a"/>
+  <text x="415" y="323" class="tag">protein</text>
+  <circle cx="490" cy="290" r="12" fill="#f5c842" opacity="0.9"/>
+  <text x="490" y="290" class="sat-badge" fill="#1a1208">10</text>
+
+  <!-- Sus Meat -->
+  <rect x="348" y="390" width="150" height="52" class="node-base node-combined" filter="url(#glow-blue)"/>
+  <text x="423" y="407" class="node-label">Sus Meat</text>
+  <text x="423" y="421" class="node-sublabel">sat: 6</text>
+  <rect x="354" y="431" width="42" height="14" class="tag-pill" fill="#3a5a1a"/>
+  <text x="375" y="438" class="tag">protein</text>
+  <rect x="400" y="431" width="32" height="14" class="tag-pill" fill="#2a4a5a"/>
+  <text x="416" y="438" class="tag">dizzy</text>
+  <circle cx="490" cy="405" r="12" fill="#f5c842" opacity="0.9"/>
+  <text x="490" y="405" class="sat-badge" fill="#1a1208">6</text>
+
+  <!-- Darkmatter — node-combined (blue), not special -->
+  <rect x="348" y="500" width="150" height="52" class="node-base node-combined" filter="url(#glow-blue)"/>
+  <text x="423" y="517" class="node-label">Darkmatter</text>
+  <text x="423" y="531" class="node-sublabel">sat: 15</text>
+  <rect x="366" y="541" width="58" height="14" class="tag-pill" fill="#3a0a5a"/>
+  <text x="395" y="548" class="tag">dark magic</text>
+  <circle cx="490" cy="515" r="12" fill="#f5c842" opacity="0.9"/>
+  <text x="490" y="515" class="sat-badge" fill="#1a1208">15</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ENEMIES -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <rect x="700" y="50"  width="345" height="68" class="node-base node-enemy"/>
+  <text x="872"  y="72"  class="node-label">Flying Eye  [Stage 1]</text>
+  <text x="872"  y="88"  class="node-sublabel">Allergy: nuts  |  max 3 ingredients  |  sat >= 1</text>
+
+  <rect x="700" y="168" width="345" height="68" class="node-base node-enemy"/>
+  <text x="872"  y="190" class="node-label">Blob Minion  [Stage 2]</text>
+  <text x="872"  y="206" class="node-sublabel">Needs: spicy x 3  (no allergy)</text>
+
+  <rect x="700" y="286" width="345" height="68" class="node-base node-enemy"/>
+  <text x="872"  y="308" class="node-label">Knight  [Stage 3]</text>
+  <text x="872"  y="324" class="node-sublabel">Only protein  |  sat >= 12</text>
+
+  <rect x="700" y="404" width="345" height="68" class="node-base node-enemy"/>
+  <text x="872"  y="426" class="node-label">The Summoner  [Stage 4]</text>
+  <text x="872"  y="442" class="node-sublabel">Allergy: dark magic  |  max 5 pot merges</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- CRAFTING ARROWS
+       Left-col ingredients exit right edge at x=155.
+       Right-col ingredients exit right edge at x=300.
+       Arrows for left-col items arc BELOW their row (avoiding
+       the right-col node) before entering crafted node at x=348.
+       Right-col items go straight across.
+  -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- Pepper (155,76) -> arc below row -> Fire Squid (348,76) -->
+  <path d="M155,76 C155,118 300,118 300,102 C300,90 335,80 348,76"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+  <!-- Squid (300,76) -> straight -> Fire Squid -->
+  <path d="M300,76 L348,76" class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+
+  <!-- Garlic (155,186) -> arc below -> Garlic Oil (348,186) -->
+  <path d="M155,186 C155,228 300,228 300,212 C300,200 335,190 348,186"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+  <!-- Nuts Oil (300,186) -> straight -->
+  <path d="M300,186 L348,186" class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+
+  <!-- Egg (155,301) -> arc below -> Magical Egg (348,301) -->
+  <path d="M155,301 C155,343 300,343 300,327 C300,315 335,305 348,301"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+  <!-- Magic Flower (300,301) -> straight -->
+  <path d="M300,301 L348,301" class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+
+  <!-- Meat (155,416) -> arc below -> Sus Meat (348,416) -->
+  <path d="M155,416 C155,458 300,458 300,442 C300,430 335,420 348,416"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+  <!-- Magic Mushroom (300,416) -> straight -->
+  <path d="M300,416 L348,416" class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+
+  <!-- Magical Egg (bottom centre: 423,327) -> Darkmatter (348,526) -->
+  <path d="M423,327 C423,400 348,430 348,500"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+  <!-- Sus Meat (bottom centre: 423,442) -> Darkmatter left side -->
+  <path d="M423,442 C423,468 380,480 360,500"
+        class="arrow-base arrow-craft" marker-end="url(#arrow-blue)"/>
+
+  <!-- "via pot" labels in the arc space between columns -->
+  <text x="222" y="125" style="font-family:'Crimson Pro';font-size:9px;fill:#4a90d9;text-anchor:middle;">via pot</text>
+  <text x="222" y="235" style="font-family:'Crimson Pro';font-size:9px;fill:#4a90d9;text-anchor:middle;">via pot</text>
+  <text x="222" y="350" style="font-family:'Crimson Pro';font-size:9px;fill:#4a90d9;text-anchor:middle;">via pot</text>
+  <text x="222" y="465" style="font-family:'Crimson Pro';font-size:9px;fill:#4a90d9;text-anchor:middle;">via pot</text>
+  <text x="388" y="475" style="font-family:'Crimson Pro';font-size:9px;fill:#4a90d9;text-anchor:middle;">via pot</text>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- DEFEAT ARROWS -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <!-- Nuts Oil right edge (300,186) -> Flying Eye (700,84) -->
+  <path d="M300,186 C500,186 580,84 700,84"
+        class="arrow-base arrow-defeat" marker-end="url(#arrow-red)"/>
+
+  <!-- Fire Squid right edge (498,76) -> Blob Minion (700,202) -->
+  <path d="M498,76 C590,76 640,160 700,202"
+        class="arrow-base arrow-defeat" marker-end="url(#arrow-red)"/>
+
+  <!-- Magical Egg right edge (498,301) -> Knight (700,320) -->
+  <path d="M498,301 C590,301 650,315 700,320"
+        class="arrow-base arrow-defeat" marker-end="url(#arrow-red)"/>
+
+  <!-- Darkmatter right edge (498,526) -> Summoner (700,438) -->
+  <path d="M498,526 C590,526 650,460 700,438"
+        class="arrow-base arrow-defeat" marker-end="url(#arrow-red)"/>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- DEFEAT LABELS -->
+  <!-- ══════════════════════════════════════════ -->
+  <rect x="530" y="118" width="70" height="16" rx="5" fill="#3d1e1e" stroke="#d94a4a" stroke-width="1"/>
+  <text x="565" y="126" style="font-family:'Crimson Pro';font-size:9.5px;fill:#d94a4a;text-anchor:middle;">allergy: nuts</text>
+
+  <rect x="560" y="100" width="64" height="16" rx="5" fill="#3d1e1e" stroke="#d94a4a" stroke-width="1"/>
+  <text x="592" y="108" style="font-family:'Crimson Pro';font-size:9.5px;fill:#d94a4a;text-anchor:middle;">spicy x3</text>
+
+  <rect x="568" y="292" width="92" height="16" rx="5" fill="#3d1e1e" stroke="#d94a4a" stroke-width="1"/>
+  <text x="614" y="300" style="font-family:'Crimson Pro';font-size:9.5px;fill:#d94a4a;text-anchor:middle;">protein, sat >= 12</text>
+
+  <rect x="548" y="490" width="102" height="16" rx="5" fill="#3d1e1e" stroke="#d94a4a" stroke-width="1"/>
+  <text x="599" y="498" style="font-family:'Crimson Pro';font-size:9.5px;fill:#d94a4a;text-anchor:middle;">allergy: dark magic</text>
+
+  <!-- TRASH NOTE -->
+  <rect x="348" y="570" width="290" height="26" rx="7" fill="rgba(100,100,100,0.08)" stroke="#555" stroke-width="1" stroke-dasharray="3 3"/>
+  <text x="493" y="583" style="font-family:'Crimson Pro';font-size:10.5px;fill:#666;text-anchor:middle;">Any invalid combination — Trash (sat: 1, no tags)</text>
+
+</svg>
+</body>
+</html>
