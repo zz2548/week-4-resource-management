@@ -26,6 +26,7 @@ extends Node2D
 const ING_CARD_SCENE := preload("res://scenes/IngredientCard.tscn")
 
 var _last_pot_ingredients: Array = []
+var _pending_stage_advance: bool = false
 
 func _ready() -> void:
 	_refresh_enemy_ui()
@@ -216,9 +217,10 @@ func _on_end_cooking_pressed() -> void:
 	GameState.pot_contents.clear()
 	GameState.dish_stats = {"satisfaction": 0, "tag_count": 0}
 
-	# Advance stage if defeated
+	# Mark to ddvance stage later if defeated
 	if result_text.begins_with("WIN"):
-		GameState.stage_index = min(GameState.stage_index + 1, DataDb.enemies.size())
+		enemy_node.play_defeat_animation()
+		_pending_stage_advance = true
 		GameState.pot_merges_this_stage = 0
 
 	_refresh_enemy_ui()
@@ -337,6 +339,11 @@ func _on_restart_pressed() -> void:
 
 func _on_continue_pressed() -> void:
 	result_overlay.visible = false
+	if _pending_stage_advance:
+		GameState.stage_index = min(GameState.stage_index + 1, DataDb.enemies.size())
+		_pending_stage_advance = false
+		_refresh_enemy_ui()
+		enemy_node.play_spawn_animation()
 	_refresh_dish_ui()
 
 func _refresh_pot_highlights() -> void:

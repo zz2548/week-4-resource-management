@@ -60,3 +60,58 @@ func _build_sprite_frames(frames_data: Array, enemy: Dictionary) -> void:
 	if sf.get_frame_count("default") > 0:
 		anim_sprite.sprite_frames = sf
 		anim_sprite.play("default")
+
+func play_defeat_animation() -> void:
+	var original_scale: Vector2 = anim_sprite.scale
+	var original_pos: Vector2 = anim_sprite.position
+
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+
+	# Big shake — wider and faster
+	tween.tween_method(_do_shake.bind(original_pos), 0.0, 1.0, 0.6)
+
+	# Flash red repeatedly
+	tween.tween_method(_do_flash, 0.0, 1.0, 0.6)
+
+	# Slight scale punch up first
+	tween.tween_property(anim_sprite, "scale", original_scale * 1.3, 0.1).set_trans(Tween.TRANS_BACK)
+
+	await tween.finished
+
+	# Fade to dust — shrink, drift upward, dissolve
+	var dust_tween: Tween = create_tween()
+	dust_tween.set_parallel(true)
+	dust_tween.tween_property(anim_sprite, "modulate", Color(0.6, 0.4, 0.2, 0.0), 0.8).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	dust_tween.tween_property(anim_sprite, "scale", original_scale * 0.3, 0.8).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	dust_tween.tween_property(anim_sprite, "position", original_pos + Vector2(0, -60), 0.8).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+
+	await dust_tween.finished
+	anim_sprite.visible = false
+	# Reset for next spawn
+	anim_sprite.position = original_pos
+	anim_sprite.scale = original_scale
+	anim_sprite.modulate = Color.WHITE
+
+func _do_shake(original_pos: Vector2, t: float) -> void:
+	var intensity: float = 30.0 * (1.0 - t)
+	anim_sprite.position = original_pos + Vector2(
+		randf_range(-intensity, intensity),
+		randf_range(-intensity * 0.3, intensity * 0.3)
+	)
+
+func _do_flash(t: float) -> void:
+	var flicker: float = sin(t * 40.0)
+	if flicker > 0.0:
+		anim_sprite.modulate = Color(1.0, 0.2, 0.2, 1.0)
+	else:
+		anim_sprite.modulate = Color.WHITE
+	
+func play_spawn_animation() -> void:
+	anim_sprite.modulate = Color(1, 1, 1, 0)
+	anim_sprite.scale *= 0.5
+	var original_scale: Vector2 = anim_sprite.scale / 0.5
+	var tween: Tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(anim_sprite, "modulate", Color.WHITE, 0.4)
+	tween.tween_property(anim_sprite, "scale", original_scale, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
