@@ -48,6 +48,8 @@ func _render_inventory() -> void:
 		var tags_arr: Array = data.get("tags", [])
 		var sat: int = int(data.get("satisfaction", 0))
 		card.setup(id, data["name"], data["icon"], count, tags_arr, sat)
+	
+	_refresh_pot_highlights()
 
 func _on_ingredient_dropped_to_selected(id: String) -> void:
 	if GameState.inventory.get(id, 0) <= 0:
@@ -57,6 +59,7 @@ func _on_ingredient_dropped_to_selected(id: String) -> void:
 	GameState.dish_selected.append(id)
 	_recompute_dish_stats()
 	_render_inventory()
+	_refresh_pot_highlights()
 	_refresh_dish_ui()
 
 func _on_ingredient_dropped_to_pot(id: String) -> void:
@@ -284,3 +287,15 @@ func _on_restart_pressed() -> void:
 func _on_continue_pressed() -> void:
 	result_overlay.visible = false
 	_refresh_dish_ui()
+
+func _refresh_pot_highlights() -> void:
+	for card in inventory_grid.get_children():
+		if not card is Button:
+			continue
+		if GameState.pot_contents.size() == 1:
+			var test_combo := [GameState.pot_contents[0], card.ingredient_id]
+			var result: Dictionary = DataDb.get_pot_combination(test_combo)
+			card.set_highlight(result.get("id", "trash") != "trash")
+		else:
+			card.set_highlight(false)
+			

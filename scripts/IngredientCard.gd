@@ -48,3 +48,9 @@ func _do_force_drag() -> void:
 	var preview := duplicate()
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	force_drag(data, preview)
+	
+func set_highlight(active: bool) -> void:
+	if active:
+		modulate = Color(1.0, 1.0, 0.4)  # yellow tint
+	else:
+		modulate = Color.WHITE
