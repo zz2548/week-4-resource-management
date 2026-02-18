@@ -321,8 +321,10 @@ func _show_result_overlay(is_win: bool) -> void:
 	if is_win:
 		result_label.add_theme_color_override("font_color", Color(0.3, 0.9, 0.3))
 		restart_btn.visible = false
-		continue_btn.visible = true
+		continue_btn.visible = false
 		_play_sfx(win_sound)
+		await enemy_node.play_defeat_animation()
+		continue_btn.visible = true
 	else:
 		result_label.add_theme_color_override("font_color", Color(0.95, 0.3, 0.3))
 		restart_btn.visible = true
